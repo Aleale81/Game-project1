@@ -21,4 +21,10 @@ body {
 
 #player {
     position: absolute;
+    transition: linear 500ms;
+
+}
+
+.pigeons {
+    position: absolute;
 }
