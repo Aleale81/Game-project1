@@ -1,7 +1,24 @@
 body {
-    background-color : pink;
+    background-color : rgb(227, 141, 209);
+    position: relative;
+    height: 100vh;
 }
 
-#background {
-    background-color: aliceblue;
+
+#board {
+    background-color: rgb(146, 234, 244);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 500px;
+    width: 700px;
+    border: 10px solid #000;
+    border-radius: 10px;
+}
+
+#player {
+    position: absolute;
 }
