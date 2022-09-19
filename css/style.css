@@ -21,7 +21,7 @@ body {
 
 #player {
     position: absolute;
-    transition: linear 500ms;
+    transition: linear 100ms;
 
 }
 
@@ -29,5 +29,9 @@ body {
     position: absolute;
 }
 .bullets {
+    position: absolute;
+}
+
+.poops {
     position: absolute;
 }
