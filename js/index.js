@@ -4,41 +4,59 @@ class Game {
     constructor(){
         this.player = null;
         this.pigeons = [];
+        this.bullets = [];
     };
     start(){
         this.player = new Player();
-        console.log("let's play!")
         this.playerEventListener()
 
         setInterval(() => {
             const newPigeons = new Pigeons();
             this.pigeons.push(newPigeons);
-        }, 4000);
+        }, 6000);
 
         setInterval(() => {
             this.pigeons.forEach((pigeon) => {
-                pigeon.move();
-                console.log(pigeon)
-                this.removePigeonOut(pigeon);
-            }, 0 )
-        })
+                pigeon.move();               
+                this.removePigeonOut(pigeon)
+            });
+        }, 40 )
+        setInterval(() => {
+            this.bullets.forEach((bullet) => {
+                bullet.shoot();
+                this.removeBulletOut(bullet);
+            })
+        }, 10)
+        
     };
 
     playerEventListener(){
         document.addEventListener('keydown', (event) => {
-            this.player.move(event.key)
+            this.player.move(event.key);
+            if(event.key === ' '){
+                const newBullets = new Bullets(this.player.positionX + (this.player.width / 2) , this.player.positionY + this.player.heigth);
+                this.bullets.push(newBullets);
+                console.log(this.bullets)
+            }
         })
     };
-    removePigeonOut(pigeon){
-        console.log(pigeon.positionX)
-        
-        if(Number(pigeon.positionX - pigeon.width)  >= 100){
-            pigeon.divElm.remove();
-           this.pigeons.shift();
-           
-            
-        } 
 
+    detectCollision(){
+        
+    };
+    
+    removePigeonOut(pigeon){  
+        if((pigeon.positionX + pigeon.width)  >= 100){
+            pigeon.divElm.remove();
+            this.pigeons.shift();           
+        } 
+    };
+    removeBulletOut(bullet){
+        if((bullet.positionY + bullet.width) >= 100){
+            console.log('removing')
+            bullet.divElm.remove();
+            this.bullets.shift();
+        }
     }
     
 };
@@ -91,9 +109,7 @@ class Player {
                 break;
                 
            // case 'ArrowUp'
-           // case 'ArroeDown'
-           // case ' ' : spacebar for shooting...
-                
+           // case 'ArroeDown'               
         }
     }     
         
@@ -129,15 +145,41 @@ class Pigeons {
     };
 
     move(){
-
-            this.positionX += 0.1;
-            this.divElm.style.left = this.positionX + "%"
+        this.positionX += 0.1;
+        this.divElm.style.left = this.positionX + "%"
         }
-        
+};
 
+class Bullets {
+    constructor(positionX, positionY){
+        this.width = 1;
+        this.heigth = 1;
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.divElm = null;
+        this.color = 'black'
+        //this.speed = 0.1;
+        this.createDivElm();
+    };
+    
+    createDivElm(){
+        const parentElm = document.querySelector('#board');
+        this.divElm = document.createElement('div');
+        this.divElm.classList = 'bullets';
+        this.divElm.style.backgroundColor = this.color;
+        this.divElm.style.width = this.width + "%";
+        this.divElm.style.height = this.heigth + "%";
+        this.divElm.style.bottom = this.positionY  + "%";
+        this.divElm.style.left = this.positionX + "%";
 
-
-}
+        parentElm.appendChild(this.divElm);
+    };
+    shoot(){
+        console.log('shoooooooting')
+        this.positionY++;
+        this.divElm.style.bottom = this.positionY + "%";
+    }
+};
 
 const game = new Game();
 game.start();
