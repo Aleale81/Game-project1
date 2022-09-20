@@ -13,16 +13,25 @@ body {
     left: 0;
     right: 0;
     margin: auto;
-    height: 500px;
-    width: 700px;
+    height: 70%;
+    width: 50%;
     border: 10px solid #000;
     border-radius: 10px;
+}
+
+#points {
+  position: absolute;
+  font-size: 5vh;
+  text-align: center;
 }
 
 #player {
     position: absolute;
     transition: linear 100ms;
 
+}
+.rotated {
+    transform: rotate(45deg);
 }
 
 .pigeons {
@@ -34,4 +43,18 @@ body {
 
 .poops {
     position: absolute;
+}
+
+#game_over {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 70%;
+    width: 50%;
+    border: 10px solid red;
+    border-radius: 10px;
+    text-align: center;
 }

@@ -6,9 +6,14 @@ class Game {
         this.pigeons = [];
         this.bullets = [];
         this.poops = [];
+        this.pointsDisplayer = null;
+        this.points = 0;
+        this.gameOver = null;
     };
     start(){
         this.player = new Player();
+        this.pointsDisplayer = new Points();
+        this.displayPoints(this.points)
         this.playerEventListener()
 
         setInterval(() => {
@@ -17,10 +22,10 @@ class Game {
         }, 2000);
 
         setInterval(() => {
-            this.pigeons.forEach((pigeon) => {
+            this.pigeons.forEach((pigeon,pigeonIndex) => {
                 pigeon.move();               
                 this.removePigeonOut(pigeon);
-                this.detectCollision(pigeon);
+                this.detectCollisionBulletPigeon(pigeon, pigeonIndex);
             });
         }, 50);
 
@@ -32,9 +37,10 @@ class Game {
         }, 10);
 
         setInterval(() => {
-            this.poops.forEach((poop) => {
-                poop.fall()
+            this.poops.forEach((poop, poopIndex) => {
+                poop.fall()                
                 this.removePoopOut(poop)
+                this.detectCollisionPlayerPoop(poop, poopIndex)
             })
         },30)
         
@@ -50,26 +56,57 @@ class Game {
         })
     };
 
-    detectCollision(pigeon){
-        this.bullets.forEach((bullet) => {
+    detectCollisionBulletPigeon(pigeon, pigeonIndex){
+
+        this.bullets.forEach((bullet, index) => {
             if(
             pigeon.positionX < (bullet.positionX + bullet.width) && 
-            (pigeon.positionX + pigeon.width) > bullet.positionX &&  
-            bullet.positionY === pigeon.positionY )
-            {               
-                let releasePositionX = pigeon.positionX - (pigeon.width / 2);
+            (pigeon.positionX + pigeon.width) > bullet.positionX && 
+            bullet.positionY >= pigeon.positionY )
+            {   let releasePositionX = pigeon.positionX - (pigeon.width / 2);
                 let releasePositionY = pigeon.positionY;
-
-                const newPoop = new Poops(releasePositionX , releasePositionY);
-                this.poops.push(newPoop) 
-                console.log(this.poops)
+                this.displayPoints(pigeon.point)
                 pigeon.divElm.remove();
+                this.pigeons.splice(pigeonIndex,1)
+                this.bullets.splice(index, 1);
+                bullet.divElm.remove()
+                const newPoop = new Poops(releasePositionX , releasePositionY);              
+                this.poops.push(newPoop)                
             }
-        }) 
-           
-        
+        })            
     };
 
+    detectCollisionPlayerPoop(poop, poopIndex){
+        if(
+        this.player.positionX < (poop.positionX + poop.width) && 
+        (this.player.positionX + this.player.width) > poop.positionX && 
+        this.player.positionY < (poop.positionY + poop.width) && 
+        (this.player.positionY + this.player.width) > poop.positionY 
+        ){
+            poop.divElm.remove();
+            this.poops.slice(poopIndex, 1)
+            this.player.divElm.className = "rotated";
+            this.gameOverPopUp();
+        }
+    };
+
+    gameOverPopUp(){
+        this.gameOver = new GameOver();
+        const boardElm = document.querySelector('#board');
+        boardElm.style.opacity = '0.3';
+        this.gameOver.divElm.innerHTML = `<h1>Game Over!</h1><button>TRY AGAIN</button> <p>Total Score: ${this.points}</p>`
+        const button = document.querySelector('#game_over button')
+        document.addEventListener('click', (event) => {
+            console.log(event)
+            location.reload()
+        })
+    };
+
+    displayPoints(point){
+        this.points += point;
+
+        this.pointsDisplayer.divElm.innerHTML = `<h3>Points: ${this.points}<h3> <h3> Level: 1<h3>`;
+    };
     removePigeonOut(pigeon){  
         if((pigeon.positionX + pigeon.width)  >= 100){
             pigeon.divElm.remove();
@@ -87,7 +124,7 @@ class Game {
             this.poops.shift(poop);
             poop.divElm.remove()
         }
-    }
+    };
     
 };
 
@@ -137,9 +174,7 @@ class Player {
                 } 
                 this.divElm.style.left = this.positionX + "%"; 
                 break;
-                
-           // case 'ArrowUp'
-           // case 'ArroeDown'               
+                            
         }
     }     
         
@@ -157,7 +192,8 @@ class Pigeons {
         this.positionY = 70;
         this.divElm = null;
         this.color = 'grey'
-        //this.speed = 0.1;
+        this.speed = 0.4;
+        this.point = 5;
         this.createDivElm();
     };
     
@@ -175,7 +211,7 @@ class Pigeons {
     };
 
     move(){
-        this.positionX += 0.4;
+        this.positionX += this.speed;
         this.divElm.style.left = this.positionX + "%"
         }
 };
@@ -188,7 +224,7 @@ class Bullets {
         this.positionY = positionY;
         this.divElm = null;
         this.color = 'black'
-        //this.speed = 0.1;
+        this.speed = 1;
         this.createDivElm();
     };
     
@@ -205,7 +241,7 @@ class Bullets {
         parentElm.appendChild(this.divElm);
     };
     shoot(){
-        this.positionY++;
+        this.positionY += this.speed;
         this.divElm.style.bottom = this.positionY + "%";
     }
 };
@@ -218,7 +254,7 @@ class Poops {
         this.positionY = positionY;
         this.divElm = null;
         this.color = 'brown'
-        //this.speed = 0.1;
+        this.speed = 1;
         this.createDivElm();
     };
     
@@ -235,9 +271,50 @@ class Poops {
         parentElm.appendChild(this.divElm);
     };
     fall(){
-        this.positionY -= 1;
+        this.positionY -= this.speed;
         this.divElm.style.bottom = this.positionY + "%";
     }
+};
+
+class Points {
+    constructor(){
+        this.width = 24;
+        this.height = 18;
+        this.positionX = 110;
+        this.positionY = 40;
+        this.divElm = null;
+        this.color = 'orange'
+        this.createDivElm();       
+    };
+    createDivElm(){
+        const parentElm = document.querySelector('#board');
+        this.divElm = document.createElement('div');
+        this.divElm.id = 'points';
+        this.divElm.style.backgroundColor = this.color
+        this.divElm.style.width = this.width + "%";
+        this.divElm.style.height = this.heigth + "%";
+        this.divElm.style.bottom = this.positionY  + "%";
+        this.divElm.style.left = this.positionX + "%";
+
+        parentElm.appendChild(this.divElm);
+    };
+
+};
+
+class GameOver {
+    constructor(){
+        this.divElm = null;
+        this.color = 'white'
+        this.createDivElm();
+    };
+
+    createDivElm(){
+        const parentElm = document.querySelector('body');
+        this.divElm = document.createElement('div');
+        this.divElm.id = 'game_over';
+        this.divElm.style.backgroundColor = this.color
+        parentElm.appendChild(this.divElm);
+    };
 };
 
 
