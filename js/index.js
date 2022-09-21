@@ -95,9 +95,7 @@ class Game {
         const boardElm = document.querySelector('#board');
         boardElm.style.opacity = '0.3';
         this.gameOver.divElm.innerHTML = `<h1>Game Over!</h1><button>TRY AGAIN</button> <p>Total Score: ${this.points}</p>`
-        const button = document.querySelector('#game_over button')
         document.addEventListener('click', (event) => {
-            console.log(event)
             location.reload()
         })
     };
@@ -128,14 +126,15 @@ class Game {
     
 };
 
-class Player {
-    constructor(){
-        this.width = 10;
-        this.heigth = 10;
-        this.positionX = 45
-        this.positionY = 0;
+class GameElement {
+    constructor(width, height, positionX, positionY, color, speed){
+        this.width = width;
+        this.heigth = height;
+        this.positionX = positionX
+        this.positionY = positionY;
         this.divElm = null;
-        this.color = 'blue'
+        this.color = color
+        this.speed = speed;
         this.createDivElm();
     };
 
@@ -143,7 +142,36 @@ class Player {
         const parentElm = document.querySelector('#board');
         this.divElm = document.createElement('div');
         this.divElm.id = 'player';
-        this.divElm.style.backgroundColor = this.color
+       // this.divElm.style.backgroundColor = this.color
+        this.divElm.style.width = this.width + "%";
+        this.divElm.style.height = this.heigth + "%";
+        this.divElm.style.bottom = this.positionY + "%";
+        this.divElm.style.left = this.positionX + "%"
+
+        parentElm.appendChild(this.divElm);
+    };
+
+}
+
+
+
+class Player {
+    constructor(){
+        this.width = 12;
+        this.heigth = 16;
+        this.positionX = 45
+        this.positionY = 0;
+        this.divElm = null;
+        this.color = 'blue'
+        this.speed = 3;
+        this.createDivElm();
+    };
+
+    createDivElm(){
+        const parentElm = document.querySelector('#board');
+        this.divElm = document.createElement('div');
+        this.divElm.id = 'player';
+       // this.divElm.style.backgroundColor = this.color
         this.divElm.style.width = this.width + "%";
         this.divElm.style.height = this.heigth + "%";
         this.divElm.style.bottom = this.positionY + "%";
@@ -158,7 +186,7 @@ class Player {
         
             case 'ArrowLeft' :              
                 if(this.positionX > 0 && this.positionX <= (100 - this.width)){
-                   this.positionX -= 3; 
+                   this.positionX -= this.speed; 
                 } else {
                     this.positionX = 0;
                 }
@@ -168,7 +196,7 @@ class Player {
         
             case 'ArrowRight' :                       
                 if(this.positionX >= 0 && this.positionX < (100 - this.width)){
-                    this.positionX += 3; 
+                    this.positionX += this.speed; 
                 }  else {
                     this.positionX = 100 - this.width;
                 } 
@@ -201,7 +229,7 @@ class Pigeons {
         const parentElm = document.querySelector('#board');
         this.divElm = document.createElement('div');
         this.divElm.classList = 'pigeons';
-        this.divElm.style.backgroundColor = this.color
+        //this.divElm.style.backgroundColor = this.color
         this.divElm.style.width = this.width + "%";
         this.divElm.style.height = this.heigth + "%";
         this.divElm.style.bottom = this.positionY + "%";
@@ -223,7 +251,7 @@ class Bullets {
         this.positionX = positionX;
         this.positionY = positionY;
         this.divElm = null;
-        this.color = 'black'
+        //this.color = 'grey'
         this.speed = 1;
         this.createDivElm();
     };
@@ -232,7 +260,8 @@ class Bullets {
         const parentElm = document.querySelector('#board');
         this.divElm = document.createElement('div');
         this.divElm.classList = 'bullets';
-        this.divElm.style.backgroundColor = this.color;
+        this.divElm.innerHTML = '<i class="fa-solid fa-bomb"></i>';
+        //this.divElm.style.backgroundColor = this.color;
         this.divElm.style.width = this.width + "%";
         this.divElm.style.height = this.heigth + "%";
         this.divElm.style.bottom = this.positionY  + "%";
@@ -253,7 +282,7 @@ class Poops {
         this.positionX = positionX;
         this.positionY = positionY;
         this.divElm = null;
-        this.color = 'brown'
+       // this.color = 'brown'
         this.speed = 1;
         this.createDivElm();
     };
@@ -262,7 +291,8 @@ class Poops {
         const parentElm = document.querySelector('#board');
         this.divElm = document.createElement('div');
         this.divElm.classList = 'poops';
-        this.divElm.style.backgroundColor = this.color;
+        this.divElm.innerHTML = '<i class="fa-solid fa-poo"></i>'
+        //this.divElm.style.backgroundColor = this.color;
         this.divElm.style.width = this.width + "%";
         this.divElm.style.height = this.heigth + "%";
         this.divElm.style.bottom = this.positionY  + "%";
@@ -290,7 +320,7 @@ class Points {
         const parentElm = document.querySelector('#board');
         this.divElm = document.createElement('div');
         this.divElm.id = 'points';
-        this.divElm.style.backgroundColor = this.color
+        this.divElm.style.background = this.color
         this.divElm.style.width = this.width + "%";
         this.divElm.style.height = this.heigth + "%";
         this.divElm.style.bottom = this.positionY  + "%";

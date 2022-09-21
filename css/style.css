@@ -6,6 +6,11 @@ body {
 
 
 #board {
+    background-image: url("../img/background.jpg");
+    background-size: cover;
+    background-attachment: scroll;
+    background-position: center center;
+    background-repeat: no-repeat;
     background-color: rgb(146, 234, 244);
     position: absolute;
     top: 0;
@@ -28,6 +33,11 @@ body {
 #player {
     position: absolute;
     transition: linear 100ms;
+    background-image: url("../img/old1.png");
+    background-size: cover;
+    background-attachment: scroll;
+    background-position: center center;
+    background-repeat: no-repeat;
 
 }
 .rotated {
@@ -36,6 +46,10 @@ body {
 
 .pigeons {
     position: absolute;
+    background-image: url("../img/pigeon-fly.png");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 .bullets {
     position: absolute;
@@ -46,6 +60,10 @@ body {
 }
 
 #game_over {
+    background-image: url("../img/pigeon.jpeg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -54,7 +72,11 @@ body {
     margin: auto;
     height: 70%;
     width: 50%;
-    border: 10px solid red;
+    border: 20px solid rgb(2, 65, 153);
+    border-style: dashed double;
     border-radius: 10px;
     text-align: center;
+}
+#title {
+    
 }
