@@ -24,18 +24,25 @@ body {
     border-radius: 10px;
 }
 
-#points {
+.points {
   position: absolute;
-  font-size: 5vh;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  font-size: 4.5vh;
   text-align: center;
 }
+.points h3 {
+    color: rgb(78, 8, 78);
+}
+.points h4 {
+    color: rgba(255, 255, 255, 0.802)
+ }
 
-#player {
+.player {
     position: absolute;
-    transition: linear 100ms;
-    background-image: url("../img/old1.png");
+    transition: linear 100ms;  
     background-size: cover;
-    background-attachment: scroll;
     background-position: center center;
     background-repeat: no-repeat;
 
@@ -46,7 +53,6 @@ body {
 
 .pigeons {
     position: absolute;
-    background-image: url("../img/pigeon-fly.png");
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -77,6 +83,23 @@ body {
     border-radius: 10px;
     text-align: center;
 }
+
 #title {
-    
+    padding-top: 150px;
+    padding-left: 40px;
+}
+
+#title h1 {
+    font-size: 46px;
+    text-align: start;
+}
+#title span {
+    margin-right: 5px;
+    padding: 2px;
+    color: whitesmoke;
+    font-size: 18px;
+    text-align: center;
+    background-color: #7ca5c6;
+    border: 1px solid  #4a7090;
+    border-radius: 20%;
 }
