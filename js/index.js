@@ -72,7 +72,8 @@ class Game {
                 this.bullets.splice(index, 1);
                 bullet.divElm.remove()
                 const newPoop = new Poops(poops.width, poops.heigth, releasePositionX, releasePositionY , poops.img, poops.id, poops.icon, poops.speed, poops.point );              
-                this.poops.push(newPoop)                
+                this.poops.push(newPoop) 
+                document.querySelector('.fa-poo').style.color = 'purple'               
             }
         })            
     };
@@ -103,11 +104,11 @@ class Game {
 
     displayPoints(point){
         this.points += point;
-
         this.pointsDisplayer.divElm.innerHTML = `<h3>Points: ${this.points}<h3> <h4> Level: ${this.level.level}<h4>`;
     };
     removePigeonOut(pigeon){  
         if((pigeon.positionX + pigeon.width)  >= 100){
+            pigeon.divElm.style.className = 'rotated';
             pigeon.divElm.remove();
             this.pigeons.shift();           
         } 

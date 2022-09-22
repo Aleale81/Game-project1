@@ -48,7 +48,7 @@ body {
 
 }
 .rotated {
-    transform: rotate(45deg);
+    transform: rotate(90deg);
 }
 
 .pigeons {
@@ -93,9 +93,12 @@ body {
     font-size: 46px;
     text-align: start;
 }
+
+#title p {
+    margin: 4px;
+}
 #title span {
     margin-right: 5px;
-    padding: 2px;
     color: whitesmoke;
     font-size: 18px;
     text-align: center;
