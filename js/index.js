@@ -11,7 +11,7 @@ class Game {
         this.gameOver = null;
         this.intervalDelay = 2000;
         this.currentLevel = 1;
-        this.level2 = { level: 2, positionX: pigeon.positionX, positionY:  Math.floor(Math.random() * 50 - 1)+ 50 , img: pigeon.img, speed: pigeon.speed, point: 7};
+        this.level2 = { level: 2, positionX: pigeon.positionX, positionY:  Math.floor(Math.random() * 50 - 6)+ 50 , img: pigeon.img, speed: pigeon.speed, point: 7};
         this.level3 = { level: 3, positionX: pigeon.positionX , positionY: 50, img: pigeon.img, speed: 0.6, point: pigeon.point};
         this.level4 = { level: 4, positionX: pigeon.positionX , positionY: 80, img: pigeon.img, speed: 0.8, point: 5};
     };
@@ -57,6 +57,8 @@ class Game {
             if(event.key === ' '){
                 const newBullets = new Bullets(bullets.width, bullets.heigth, this.player.positionX + (this.player.width / 2), this.player.positionY + this.player.heigth , bullets.img, bullets.id, bullets.icon, bullets.speed, bullets.point );
                 this.bullets.push(newBullets);
+                const popSound = new Audio("../sound/pop.wav"); // buffers automatically when created
+                popSound.play(); 
             }
         })
     };
@@ -69,6 +71,8 @@ class Game {
             bullet.positionY >= pigeon.positionY )
             {   let releasePositionX = pigeon.positionX - (pigeon.width / 2);
                 let releasePositionY = pigeon.positionY;
+                const birdSound = new Audio("./sound/bird.mp3"); // buffers automatically when created
+                birdSound.play();
                 this.displayPoints(pigeon.point)
                 pigeon.divElm.remove();
                 this.pigeons.splice(pigeonIndex,1)
@@ -89,7 +93,9 @@ class Game {
         ){
             poop.divElm.remove();
             this.poops.slice(poopIndex, 1)
-            this.player.divElm.classList.add("rotated") ;
+            this.player.divElm.classList.add("rotated");
+            const squishSound = new Audio("./sound/squish2.wav"); // buffers automatically when created
+            squishSound.play();                    
             setTimeout(()=> {this.gameOverPopUp();}, 1200);            
         }
     };
