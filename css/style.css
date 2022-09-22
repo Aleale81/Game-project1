@@ -48,7 +48,7 @@ body {
 
 }
 .rotated {
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
 }
 
 .pigeons {

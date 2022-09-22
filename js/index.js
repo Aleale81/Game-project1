@@ -39,8 +39,7 @@ class Game {
 
         setInterval(() => {
             this.poops.forEach((poop, poopIndex) => {
-                poop.fall() 
-                poop.rotate();               
+                poop.fall()             
                 this.removePoopOut(poop)
                 this.detectCollisionPlayerPoop(poop, poopIndex)
             })
@@ -74,8 +73,8 @@ class Game {
                 bullet.divElm.remove()
                 const newPoop = new Poops(poops.width, poops.heigth, releasePositionX, releasePositionY , poops.img, poops.id, poops.icon, poops.speed, poops.point );              
                 this.poops.push(newPoop) 
-                document.querySelector('.fa-poo').style.color = 'purple'               
-            }
+                document.querySelector('.fa-poo').style.color = this.reandomColorGeneretor();               
+           }
         })            
     };
 
@@ -88,8 +87,8 @@ class Game {
         ){
             poop.divElm.remove();
             this.poops.slice(poopIndex, 1)
-            this.player.divElm.className = "rotated";
-            this.gameOverPopUp();
+            this.player.divElm.classList.add("rotated") ;
+            setTimeout(()=> {this.gameOverPopUp();}, 1200);            
         }
     };
 
@@ -101,6 +100,12 @@ class Game {
         document.addEventListener('click', (event) => {
             location.reload()
         })
+    };
+    reandomColorGeneretor(){
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        return  `rgb(${r} , ${g} ,${b})`
     };
 
     displayPoints(point){
@@ -246,14 +251,12 @@ class Poops extends GameElement{
         this.icon = icon;
         this.speed = speed;
         this.createDivElm();
+
     };
-    
     fall(){
         this.positionY -= this.speed;
         this.divElm.style.bottom = this.positionY + "%";
     }
-
-    rotationAndColors(){}
 };
 
 class Points extends GameElement{
