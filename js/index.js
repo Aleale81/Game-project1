@@ -9,7 +9,11 @@ class Game {
         this.pointsDisplayer = null;
         this.points = 0;
         this.gameOver = null;
-        this.level = {level: "1", }
+        this.intervalDelay = 2000;
+        this.currentLevel = 1;
+        this.level2 = { level: 2, positionX: pigeon.positionX, positionY:  Math.floor(Math.random() * 50 - 1)+ 50 , img: pigeon.img, speed: pigeon.speed, point: 7};
+        this.level3 = { level: 3, positionX: pigeon.positionX , positionY: 50, img: pigeon.img, speed: 0.6, point: pigeon.point};
+        this.level4 = { level: 4, positionX: pigeon.positionX , positionY: 80, img: pigeon.img, speed: 0.8, point: 5};
     };
     start(){
         this.player = new Player(player.width, player.heigth, player.positionX, player.positionY, player.img, player.id, player.icon, player.speed);
@@ -20,7 +24,8 @@ class Game {
         setInterval(() => {
             const newPigeons = new Pigeons(pigeon.width, pigeon.heigth, pigeon.positionX, pigeon.positionY, pigeon.img, pigeon.id, pigeon.icon, pigeon.speed, pigeon.point);
             this.pigeons.push(newPigeons);
-        }, 2000);
+            this.checkLevelChange()
+        }, this.intervalDelay);
 
         setInterval(() => {
             this.pigeons.forEach((pigeon,pigeonIndex) => {
@@ -46,7 +51,6 @@ class Game {
         },30)
         
     };
-
     playerEventListener(){
         document.addEventListener('keydown', (event) => {
             this.player.move(event.key);
@@ -56,7 +60,6 @@ class Game {
             }
         })
     };
-
     detectCollisionBulletPigeon(pigeon, pigeonIndex){
 
         this.bullets.forEach((bullet, index) => {
@@ -73,11 +76,10 @@ class Game {
                 bullet.divElm.remove()
                 const newPoop = new Poops(poops.width, poops.heigth, releasePositionX, releasePositionY , poops.img, poops.id, poops.icon, poops.speed, poops.point );              
                 this.poops.push(newPoop) 
-                document.querySelector('.fa-poo').style.color = this.reandomColorGeneretor();               
+                document.querySelector('.fa-poo').style.color = this.randomColorGeneretor();               
            }
         })            
     };
-
     detectCollisionPlayerPoop(poop, poopIndex){
         if(
         this.player.positionX < (poop.positionX + poop.width) && 
@@ -91,7 +93,6 @@ class Game {
             setTimeout(()=> {this.gameOverPopUp();}, 1200);            
         }
     };
-
     gameOverPopUp(){
         this.gameOver = new GameOver();
         const boardElm = document.querySelector('#board');
@@ -101,17 +102,16 @@ class Game {
             location.reload()
         })
     };
-    reandomColorGeneretor(){
+    randomColorGeneretor(){
         const r = Math.floor(Math.random() * 256);
         const g = Math.floor(Math.random() * 256);
         const b = Math.floor(Math.random() * 256);
         return  `rgb(${r} , ${g} ,${b})`
     };
-
     displayPoints(point){
         this.points += point;
-        this.pointsDisplayer.divElm.innerHTML = `<h3>Points: ${this.points}<h3> <h4> Level: ${this.level.level}<h4>`;
-    };
+        this.pointsDisplayer.divElm.innerHTML = `<h3>Points: ${this.points}<h3> <h4> Level: ${this.currentLevel}<h4>`;       
+    }; 
     removePigeonOut(pigeon){  
         if((pigeon.positionX + pigeon.width)  >= 100){
             pigeon.divElm.style.className = 'rotated';
@@ -130,6 +130,26 @@ class Game {
             this.poops.shift(poop);
             poop.divElm.remove()
         }
+    };
+    checkLevelChange(){
+        if(this.points >= 10  && this.points < 30){ 
+            this.intervalDelay -= 100;          
+            this.upgradeLevels(this.level2);           
+        } else if(this.points >= 30 && this.points < 60){
+            this.intervalDelay -= 100;
+            this.upgradeLevels(this.level3);           
+        } else if(this.points >= 60){
+            this.intervalDelay -= 200;
+            this.upgradeLevels(this.level4);           
+        } 
+    };
+    upgradeLevels(level){
+        this.currentLevel = level.level;
+        pigeon.positionX = level.positionX;
+        pigeon.positionY = level.positionY;
+        pigeon.img = level.img;
+        pigeon.speed = level.speed;
+        pigeon.point = level.point;
     };
     
 };
