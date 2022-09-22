@@ -57,7 +57,7 @@ class Game {
             if(event.key === ' '){
                 const newBullets = new Bullets(bullets.width, bullets.heigth, this.player.positionX + (this.player.width / 2), this.player.positionY + this.player.heigth , bullets.img, bullets.id, bullets.icon, bullets.speed, bullets.point );
                 this.bullets.push(newBullets);
-                const popSound = new Audio("../sound/pop.wav"); // buffers automatically when created
+                const popSound = new Audio("./sound/pop.wav"); // buffers automatically when created
                 popSound.play(); 
             }
         })
