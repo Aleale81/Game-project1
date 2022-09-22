@@ -24,7 +24,7 @@ class Game {
 
         setInterval(() => {
             this.pigeons.forEach((pigeon,pigeonIndex) => {
-                pigeon.move();               
+                pigeon.move();              
                 this.removePigeonOut(pigeon);
                 this.detectCollisionBulletPigeon(pigeon, pigeonIndex);
             });
@@ -39,7 +39,8 @@ class Game {
 
         setInterval(() => {
             this.poops.forEach((poop, poopIndex) => {
-                poop.fall()                
+                poop.fall() 
+                poop.rotate();               
                 this.removePoopOut(poop)
                 this.detectCollisionPlayerPoop(poop, poopIndex)
             })
@@ -251,6 +252,8 @@ class Poops extends GameElement{
         this.positionY -= this.speed;
         this.divElm.style.bottom = this.positionY + "%";
     }
+
+    rotationAndColors(){}
 };
 
 class Points extends GameElement{
@@ -284,11 +287,11 @@ class GameOver {
     };
 };
 
-const player = {width: 12, heigth: 18, positionX: 45, positionY: 0, img: "url('../img/old1.png')", id:"player", icon:null, speed: 3};
-const pigeon = {width: 6, heigth: 6, positionX: 0, positionY: 70, img: "url('../img/pigeon-fly.png')", id:"pigeons", icon: null, speed: 0.4, point:5};
+const player = {width: 12, heigth: 18, positionX: 45, positionY: 0, img: "url('./img/old1.png')", id:"player", icon:null, speed: 3};
+const pigeon = {width: 6, heigth: 6, positionX: 0, positionY: 70, img: "url('./img/pigeon-fly.png')", id:"pigeons", icon: null, speed: 0.4, point:5};
 const bullets = {width: 1, heigth: 1, positionX: null, positionY: null, img: null, id: 'bullets', icon: '<i class="fa-solid fa-bomb"></i>', speed: 1};
 const poops = {width: 2, heigth: 2, positionX: null, positionY: null, img: null, id: 'poops', icon: '<i class="fa-solid fa-poo"></i>', speed: 1}
-const points = {width: 24, heigth: 56, positionX: 110, positionY: 20, img: "url('../img/pigeon-board.jpeg')", id: 'points' , icon: null}
+const points = {width: 24, heigth: 56, positionX: 110, positionY: 20, img: "url('./img/pigeon-board.jpeg')", id: 'points' , icon: null}
 
 
 const game = new Game();
