@@ -13,7 +13,8 @@ class Game {
         this.currentLevel = 1;
         this.level2 = { level: 2, positionX: pigeon.positionX, positionY:  Math.floor(Math.random() * 50 - 6)+ 50 , img: pigeon.img, speed: pigeon.speed, point: 7};
         this.level3 = { level: 3, positionX: pigeon.positionX , positionY: 50, img: pigeon.img, speed: 0.6, point: pigeon.point};
-        this.level4 = { level: 4, positionX: pigeon.positionX , positionY: 80, img: pigeon.img, speed: 0.8, point: 5};
+        this.level4 = [{ level: 4, width: pigeon.width, heigth: pigeon.heigth, positionX: pigeon.positionX , positionY: 80, img: pigeon.img, id: pigeon.id,icon: pigeon.icon, speed: 0.8, point: 5},
+            { level: 4, width: pigeon.width, heigth: pigeon.heigth, positionX: pigeon.positionX , positionY: 60, img: "url('./img/pigeon-level4.png')", id: pigeon.id,icon: pigeon.icon, speed: 0.8, point: 7}];
     };
     start(){
         this.player = new Player(player.width, player.heigth, player.positionX, player.positionY, player.img, player.id, player.icon, player.speed);
@@ -48,9 +49,18 @@ class Game {
                 this.removePoopOut(poop)
                 this.detectCollisionPlayerPoop(poop, poopIndex)
             })
-        },30)
+        },30); 
+
+        setInterval(() => {
+            if(this.currentLevel === 4){
+                const newPigeons = new Pigeons(this.level4[1].width, this.level4[1].heigth, this.level4[1].positionX, this.level4[1].positionY, this.level4[1].img, this.level4[1].id, this.level4[1].icon, this.level4[1].speed, this.level4[1].point);
+                this.pigeons.push(newPigeons);
+            }          
+        }, this.intervalDelay + 700);
+        
         
     };
+
     playerEventListener(){
         document.addEventListener('keydown', (event) => {
             this.player.move(event.key);
@@ -119,8 +129,7 @@ class Game {
         this.pointsDisplayer.divElm.innerHTML = `<h3>Points: ${this.points}<h3> <h4> Level: ${this.currentLevel}<h4>`;       
     }; 
     removePigeonOut(pigeon){  
-        if((pigeon.positionX + pigeon.width)  >= 100){
-            pigeon.divElm.style.className = 'rotated';
+        if((pigeon.positionX + pigeon.width)  >= 100 || pigeon.positionX + pigeon.width < 0){
             pigeon.divElm.remove();
             this.pigeons.shift();           
         } 
@@ -146,7 +155,7 @@ class Game {
             this.upgradeLevels(this.level3);           
         } else if(this.points >= 60){
             this.intervalDelay -= 200;
-            this.upgradeLevels(this.level4);           
+            this.upgradeLevels(this.level4[0]);           
         } 
     };
     upgradeLevels(level){
@@ -320,7 +329,7 @@ const player = {width: 12, heigth: 18, positionX: 45, positionY: 0, img: "url('.
 const pigeon = {width: 6, heigth: 6, positionX: 0, positionY: 70, img: "url('./img/pigeon-fly.png')", id:"pigeons", icon: null, speed: 0.4, point:5};
 const bullets = {width: 1, heigth: 1, positionX: null, positionY: null, img: null, id: 'bullets', icon: '<i class="fa-solid fa-bomb"></i>', speed: 1};
 const poops = {width: 2, heigth: 2, positionX: null, positionY: null, img: null, id: 'poops', icon: '<i class="fa-solid fa-poo"></i>', speed: 1}
-const points = {width: 24, heigth: 56, positionX: 110, positionY: 20, img: "url('./img/pigeon-board.jpeg')", id: 'points' , icon: null}
+const points = {width: 24, heigth: 60, positionX: 110, positionY: 20, img: "url('./img/pigeon-board.jpeg')", id: 'points' , icon: null}
 
 
 const game = new Game();
