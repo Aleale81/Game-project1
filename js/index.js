@@ -44,12 +44,12 @@ class Game {
         }, 10);
 
         setInterval(() => {
-            this.poops.forEach((poop, poopIndex) => {
-                poop.fall()             
-                this.removePoopOut(poop)
-                this.detectCollisionPlayerPoop(poop, poopIndex)
-            })
-        },30); 
+          this.poops.forEach((poop, poopIndex) => {
+            poop.fall();
+            this.removePoopOut(poop);  
+            this.detectCollisionPlayerPoop(poop, poopIndex);
+          });
+        }, 30); 
 
         setInterval(() => {
             if(this.currentLevel === 4){
@@ -86,11 +86,11 @@ class Game {
                 this.displayPoints(pigeon.point)
                 pigeon.divElm.remove();
                 this.pigeons.splice(pigeonIndex,1)
-                this.bullets.splice(index, 1);
                 bullet.divElm.remove()
+                this.bullets.splice(index, 1);
                 const newPoop = new Poops(poops.width, poops.heigth, releasePositionX, releasePositionY , poops.img, poops.id, poops.icon, poops.speed, poops.point );              
                 this.poops.push(newPoop) 
-                document.querySelector('.fa-poo').style.color = this.randomColorGeneretor();               
+                document.querySelector('.fa-poo').style.color = this.randomColorGeneretor();
            }
         })            
     };
@@ -102,7 +102,7 @@ class Game {
         (this.player.positionY + this.player.width) > poop.positionY 
         ){
             poop.divElm.remove();
-            this.poops.slice(poopIndex, 1)
+            this.poops.splice(poopIndex, 1)
             this.player.divElm.classList.add("rotated");
             const squishSound = new Audio("./sound/squish2.wav"); // buffers automatically when created
             squishSound.play();                    
@@ -119,9 +119,10 @@ class Game {
         })
     };
     randomColorGeneretor(){
-        const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);
-        const b = Math.floor(Math.random() * 256);
+        const r = Math.floor(Math.random() * 200 + 1) ;
+        const g = Math.floor(Math.random() * 200 + 1) ;
+        const b = Math.floor(Math.random() * 200 + 1) ;
+        console.log(`rgb(${r} , ${g} ,${b})`)
         return  `rgb(${r} , ${g} ,${b})`
     };
     displayPoints(point){
@@ -215,6 +216,7 @@ class Player extends GameElement {
             case 'ArrowLeft' :              
                 if(this.positionX > 0 && this.positionX <= (100 - this.width)){
                    this.positionX -= this.speed; 
+                   this.divElm.classList.add('flip')
                 } else {
                     this.positionX = 0;
                 }
@@ -223,6 +225,7 @@ class Player extends GameElement {
             case 'ArrowRight' :                       
                 if(this.positionX >= 0 && this.positionX < (100 - this.width)){
                     this.positionX += this.speed; 
+                    this.divElm.classList.remove('flip')
                 }  else {
                     this.positionX = 100 - this.width;
                 } 
@@ -286,11 +289,12 @@ class Poops extends GameElement{
         this.icon = icon;
         this.speed = speed;
         this.createDivElm();
-
     };
+
     fall(){
         this.positionY -= this.speed;
         this.divElm.style.bottom = this.positionY + "%";
+        //transform: rotate(-90deg)
     }
 };
 

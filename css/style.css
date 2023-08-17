@@ -47,8 +47,12 @@ body {
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-
 }
+
+.flip {
+    transform: scaleX(-1);  
+}
+
 .rotated {
     transform: rotate(-90deg);
 }
